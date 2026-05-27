@@ -1,0 +1,20 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+## [1.0.0] — 2026-05-28
+
+### Added
+- Initial release of MyLastSeen API
+- `GET /api/lastseen/:username` — JSON last-seen response with activity type, repo, relative time
+- `GET /api/lastseen/:username/text` — Plain text format for terminal/scripting use
+- `GET /api/lastseen/:username/badge` — Shields.io endpoint badge for README embeds
+- `GET /api/health` — Health check with uptime and cache stats
+- Optional GitHub token support via `?token=` query param or `GITHUB_TOKEN` env var
+- In-memory caching (5-minute TTL) to reduce GitHub API calls
+- Color-coded badges: brightgreen (<1hr), green (<6hr), yellowgreen (<24hr), yellow (<3d), orange (<7d), red (>7d)
+- Rate limit pass-through from GitHub API headers
+- Express 5 server with CORS, security headers, and per-IP rate limiting
+- Vercel serverless deployment support
+- Landing page with interactive username lookup
+- Integration test suite

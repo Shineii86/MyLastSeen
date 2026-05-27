@@ -1,0 +1,19 @@
+{
+  "rewrites": [
+    { "source": "/api/lastseen/:username/text", "destination": "/api/lastseen/:username/text" },
+    { "source": "/api/lastseen/:username/badge", "destination": "/api/badge/:username" }
+  ],
+  "headers": [
+    { "source": "/api/(.*)", "headers": [
+      { "key": "Access-Control-Allow-Origin", "value": "*" },
+      { "key": "Access-Control-Allow-Methods", "value": "GET, OPTIONS" },
+      { "key": "Access-Control-Allow-Headers", "value": "Content-Type" },
+      { "key": "Cache-Control", "value": "public, s-maxage=300" }
+    ]},
+    { "source": "/", "headers": [
+      { "key": "Access-Control-Allow-Origin", "value": "*" },
+      { "key": "Cache-Control", "value": "public, max-age=3600" }
+    ]}
+  ],
+  "env": { "CACHE_TTL": "300" }
+}

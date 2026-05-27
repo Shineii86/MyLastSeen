@@ -1,0 +1,23 @@
+{
+  "name": "mylastseen",
+  "version": "1.0.0",
+  "description": "GitHub Last Seen API — Track when GitHub users were last active",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "build": "echo 'Build complete'",
+    "start": "NODE_ENV=production node server.js",
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.2",
+    "express": "^5.1.0",
+    "node-cache": "^5.1.2"
+  },
+  "engines": {
+    "node": ">=20.x"
+  },
+  "keywords": ["github", "last-seen", "api", "activity", "badge", "shields-io"],
+  "author": "Shinei Nouzen",
+  "license": "MIT"
+}
