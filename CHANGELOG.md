@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [1.0.0] — 2026-05-28
 
+### Changed
+- Replaced playground with clean user search bar — enter username, see results in a card with avatar, last seen, activity, repo, badge preview
+- Fixed badge color swatches in README and landing page — replaced broken placeholder.com images with shields.io badges and solid color circles
+
+## [1.0.0] — 2026-05-28
+
 ### Fixed
 - Fixed Vercel routing — API endpoints returning 404 due to incorrect rewrite config
 - Updated vercel.json to use regex capture groups with query params (matching AniNewsAPI pattern)

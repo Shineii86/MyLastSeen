@@ -488,12 +488,12 @@ Add a last-seen badge to your README:
 
 | Activity | Timeframe | Color |
 |:---|:---|:---|
-| Very recent | < 1 hour | ![#00c853](https://via.placeholder.com/12/00c853/00c853) `brightgreen` |
-| Active | < 6 hours | ![#44cc11](https://via.placeholder.com/12/44cc11/44cc11) `green` |
-| Today | < 24 hours | ![#9acd32](https://via.placeholder.com/12/9acd32/9acd32) `yellowgreen` |
-| Recent | < 3 days | ![#dfb317](https://via.placeholder.com/12/dfb317/dfb317) `yellow` |
-| This week | < 7 days | ![#fe7d37](https://via.placeholder.com/12/fe7d37/fe7d37) `orange` |
-| Inactive | > 7 days | ![#e05d44](https://via.placeholder.com/12/e05d44/e05d44) `red` |
+| Very recent | < 1 hour | ![#00c853](https://img.shields.io/badge/-brightgreen-00c853) |
+| Active | < 6 hours | ![#44cc11](https://img.shields.io/badge/-green-44cc11) |
+| Today | < 24 hours | ![#9acd32](https://img.shields.io/badge/-yellowgreen-9acd32) |
+| Recent | < 3 days | ![#dfb317](https://img.shields.io/badge/-yellow-dfb317) |
+| This week | < 7 days | ![#fe7d37](https://img.shields.io/badge/-orange-fe7d37) |
+| Inactive | > 7 days | ![#e05d44](https://img.shields.io/badge/-red-e05d44) |
 
 ---
 

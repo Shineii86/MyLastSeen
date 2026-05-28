@@ -744,6 +744,201 @@
     .endpoint-example .url { color: var(--accent-light); }
 
     /* ═══════════════════════════════════════
+       CHECK USER / SEARCH
+    ═══════════════════════════════════════ */
+    .check-section {
+      padding: 80px 0 60px;
+    }
+
+    .search-box {
+      max-width: 600px;
+      margin: 0 auto 32px;
+    }
+
+    .search-input-wrap {
+      display: flex;
+      align-items: center;
+      background: var(--bg-elevated);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .search-input-wrap:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-glow);
+    }
+
+    .search-icon {
+      padding: 0 0 0 20px;
+      font-size: 1.3rem;
+      color: var(--text-muted);
+    }
+
+    .search-input {
+      flex: 1;
+      padding: 18px 16px;
+      background: transparent;
+      border: none;
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-size: 1.1rem;
+      outline: none;
+    }
+
+    .search-input::placeholder { color: var(--text-muted); }
+
+    .search-btn {
+      padding: 18px 28px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .search-btn:hover { background: var(--accent-light); }
+    .search-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .search-error {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 16px 20px;
+      background: rgba(244, 63, 94, 0.1);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      border-radius: var(--radius-sm);
+      color: var(--accent-rose);
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+    .search-result {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .result-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      animation: fadeInUp 0.4s ease-out;
+    }
+
+    .result-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .result-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+    }
+
+    .result-user { flex: 1; }
+
+    .result-user h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .result-username {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      transition: var(--transition);
+    }
+
+    .result-username:hover { color: var(--accent-light); }
+
+    .result-badge {
+      flex-shrink: 0;
+    }
+
+    .result-badge img {
+      height: 28px;
+    }
+
+    .result-body {
+      padding: 20px 24px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .result-stat { text-align: center; }
+
+    .result-label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .result-value {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .result-repo-link {
+      color: var(--accent-light);
+      transition: var(--transition);
+    }
+
+    .result-repo-link:hover { color: var(--accent); text-decoration: underline; }
+
+    .result-footer {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 24px;
+      background: rgba(0, 0, 0, 0.2);
+      border-top: 1px solid var(--border);
+    }
+
+    .result-curl {
+      flex: 1;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .result-copy-btn {
+      background: var(--accent-glow);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      color: var(--accent-light);
+      padding: 8px 12px;
+      border-radius: var(--radius-xs);
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.85rem;
+    }
+
+    .result-copy-btn:hover {
+      background: var(--accent);
+      color: white;
+    }
+
+    /* ═══════════════════════════════════════
        BADGE COLORS
     ═══════════════════════════════════════ */
     .badges-section {
@@ -774,10 +969,6 @@
       width: 48px; height: 48px;
       border-radius: 50%;
       margin: 0 auto 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
     }
 
     .badge-color-card h4 {
@@ -1363,36 +1554,52 @@
     </div>
   </section>
 
-  <!-- Try It Live -->
-  <section id="tryit" class="tryit reveal">
+  <!-- Check User -->
+  <section id="check" class="check-section reveal">
     <div class="container">
       <div class="section-header">
-        <span class="section-label">Playground</span>
-        <h2>Try It Live</h2>
-        <p>Enter a GitHub username and see their last activity</p>
+        <span class="section-label">Check Activity</span>
+        <h2>When Was Someone Last Active?</h2>
+        <p>Enter a GitHub username to see their last activity</p>
       </div>
-      <div class="tryit-box">
-        <div class="tryit-bar">
-          <div class="terminal-dot r"></div>
-          <div class="terminal-dot y"></div>
-          <div class="terminal-dot g"></div>
-          <span class="terminal-title">API Playground</span>
-        </div>
-        <div class="tryit-controls">
-          <select id="tryit-endpoint" class="tryit-input" style="flex: 0 0 auto; min-width: 160px;">
-            <option value="/api/lastseen/{user}">JSON</option>
-            <option value="/api/lastseen/{user}/text">Text</option>
-            <option value="/api/lastseen/{user}/badge">Badge</option>
-            <option value="/api/health">Health</option>
-          </select>
-          <input id="tryit-username" class="tryit-input" placeholder="GitHub username e.g. Shineii86" value="Shineii86">
-          <button id="tryit-run" class="tryit-btn"><i class="fas fa-play"></i> Send</button>
-        </div>
-        <div class="tryit-hint">Pick an endpoint, enter a username, and hit Send. Response renders below.</div>
-        <div class="tryit-output">
-          <div id="tryit-result" class="tryit-result" style="display:none;"></div>
+      <div class="search-box">
+        <div class="search-input-wrap">
+          <i class="fab fa-github search-icon"></i>
+          <input id="search-username" class="search-input" type="text" placeholder="Enter GitHub username..." autocomplete="off" spellcheck="false">
+          <button id="search-btn" class="search-btn"><i class="fas fa-search"></i> Check</button>
         </div>
       </div>
+      <div id="search-result" class="search-result" style="display:none;">
+        <div class="result-card">
+          <div class="result-header">
+            <img id="result-avatar" class="result-avatar" src="" alt="">
+            <div class="result-user">
+              <h3 id="result-name"></h3>
+              <a id="result-link" href="" target="_blank" class="result-username"></a>
+            </div>
+            <div id="result-badge" class="result-badge"></div>
+          </div>
+          <div class="result-body">
+            <div class="result-stat">
+              <span class="result-label">Last Seen</span>
+              <span id="result-time" class="result-value"></span>
+            </div>
+            <div class="result-stat">
+              <span class="result-label">Activity</span>
+              <span id="result-event" class="result-value"></span>
+            </div>
+            <div class="result-stat">
+              <span class="result-label">Repository</span>
+              <a id="result-repo" class="result-value result-repo-link" href="" target="_blank"></a>
+            </div>
+          </div>
+          <div class="result-footer">
+            <code id="result-curl" class="result-curl"></code>
+            <button id="result-copy" class="result-copy-btn" title="Copy curl command"><i class="fas fa-copy"></i></button>
+          </div>
+        </div>
+      </div>
+      <div id="search-error" class="search-error" style="display:none;"></div>
     </div>
   </section>
 
@@ -1406,32 +1613,32 @@
       </div>
       <div class="badge-colors-grid">
         <div class="badge-color-card">
-          <div class="badge-swatch fi-emerald"><i class="fas fa-bolt"></i></div>
+          <div class="badge-swatch" style="background: #00c853;"></div>
           <h4>Bright Green</h4>
           <span>&lt; 1 hour ago</span>
         </div>
         <div class="badge-color-card">
-          <div class="badge-swatch fi-emerald"><i class="fas fa-clock"></i></div>
+          <div class="badge-swatch" style="background: #44cc11;"></div>
           <h4>Green</h4>
           <span>&lt; 6 hours ago</span>
         </div>
         <div class="badge-color-card">
-          <div class="badge-swatch" style="background: rgba(154,205,50,0.12); color: #9acd32;"><i class="fas fa-sun"></i></div>
+          <div class="badge-swatch" style="background: #9acd32;"></div>
           <h4>Yellow Green</h4>
           <span>&lt; 24 hours ago</span>
         </div>
         <div class="badge-color-card">
-          <div class="badge-swatch fi-amber"><i class="fas fa-calendar"></i></div>
+          <div class="badge-swatch" style="background: #dfb317;"></div>
           <h4>Yellow</h4>
           <span>&lt; 3 days ago</span>
         </div>
         <div class="badge-color-card">
-          <div class="badge-swatch" style="background: rgba(254,125,55,0.12); color: #fe7d37;"><i class="fas fa-moon"></i></div>
+          <div class="badge-swatch" style="background: #fe7d37;"></div>
           <h4>Orange</h4>
           <span>&lt; 7 days ago</span>
         </div>
         <div class="badge-color-card">
-          <div class="badge-swatch fi-rose"><i class="fas fa-power-off"></i></div>
+          <div class="badge-swatch" style="background: #e05d44;"></div>
           <h4>Red</h4>
           <span>&gt; 7 days ago</span>
         </div>
@@ -1566,56 +1773,71 @@
     })();
   </script>
 
-  <!-- Try It Live -->
+  <!-- Check User Search -->
   <script>
     (function() {
       const BASE = window.location.origin;
-      const btn = document.getElementById('tryit-run');
-      const endpoint = document.getElementById('tryit-endpoint');
-      const username = document.getElementById('tryit-username');
-      const result = document.getElementById('tryit-result');
+      const input = document.getElementById('search-username');
+      const btn = document.getElementById('search-btn');
+      const resultBox = document.getElementById('search-result');
+      const errorBox = document.getElementById('search-error');
 
-      function syntaxHighlight(json) {
-        return JSON.stringify(json, null, 2)
-          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-          .replace(/"([^"]+)":/g, '<span class="json-key">"$1"</span>:')
-          .replace(/: "([^"]*)"/g, ': <span class="json-str">"$1"</span>')
-          .replace(/: (\d+\.?\d*)/g, ': <span class="json-num">$1</span>')
-          .replace(/: (true|false)/g, ': <span class="json-bool">$1</span>')
-          .replace(/: (null)/g, ': <span class="json-null">$1</span>');
-      }
-
-      async function run() {
-        const user = username.value.trim() || 'Shineii86';
-        const ep = endpoint.value.replace('{user}', encodeURIComponent(user));
-        const url = BASE + ep;
+      async function search() {
+        const user = input.value.trim();
+        if (!user) { input.focus(); return; }
 
         btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading…';
-        result.style.display = 'block';
-        result.textContent = 'Fetching ' + url + ' …';
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking…';
+        resultBox.style.display = 'none';
+        errorBox.style.display = 'none';
 
         try {
-          const resp = await fetch(url);
-          const ct = resp.headers.get('content-type') || '';
-          let body;
-          if (ct.includes('json')) {
-            body = syntaxHighlight(await resp.json());
-          } else {
-            body = await resp.text();
-            body = body.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          const resp = await fetch(BASE + '/api/lastseen/' + encodeURIComponent(user));
+          const data = await resp.json();
+
+          if (!data.success) {
+            errorBox.textContent = data.message || 'User not found or no public activity.';
+            errorBox.style.display = 'block';
+            return;
           }
-          result.innerHTML = body;
+
+          const d = data.data;
+          document.getElementById('result-avatar').src = 'https://github.com/' + d.username + '.png';
+          document.getElementById('result-name').textContent = d.username;
+          document.getElementById('result-link').textContent = '@' + d.username;
+          document.getElementById('result-link').href = 'https://github.com/' + d.username;
+          document.getElementById('result-time').textContent = d.relativeTime;
+          document.getElementById('result-event').textContent = d.eventLabel;
+
+          const repoLink = document.getElementById('result-repo');
+          repoLink.textContent = d.eventRepo;
+          repoLink.href = 'https://github.com/' + d.eventRepo;
+
+          document.getElementById('result-badge').innerHTML =
+            '<img src="https://img.shields.io/endpoint?url=' + encodeURIComponent(BASE + '/api/lastseen/' + d.username + '/badge') + '" alt="badge">';
+
+          document.getElementById('result-curl').textContent =
+            'curl ' + BASE + '/api/lastseen/' + d.username;
+
+          resultBox.style.display = 'block';
         } catch (err) {
-          result.innerHTML = '<span style="color:var(--accent-rose)">Error: ' + err.message + '</span>';
+          errorBox.textContent = 'Failed to check user. Please try again.';
+          errorBox.style.display = 'block';
         } finally {
           btn.disabled = false;
-          btn.innerHTML = '<i class="fas fa-play"></i> Send';
+          btn.innerHTML = '<i class="fas fa-search"></i> Check';
         }
       }
 
-      btn.addEventListener('click', run);
-      username.addEventListener('keydown', (e) => { if (e.key === 'Enter') run(); });
+      btn.addEventListener('click', search);
+      input.addEventListener('keydown', (e) => { if (e.key === 'Enter') search(); });
+
+      document.getElementById('result-copy').addEventListener('click', function() {
+        const curl = document.getElementById('result-curl').textContent;
+        navigator.clipboard.writeText(curl);
+        this.innerHTML = '<i class="fas fa-check"></i>';
+        setTimeout(() => { this.innerHTML = '<i class="fas fa-copy"></i>'; }, 1500);
+      });
     })();
   </script>
 </body>
