@@ -23,7 +23,7 @@
 </p>
 
 <p align="center">
-  <b>Track when GitHub users were last active — via public events.</b><br/>
+  <b>A serverless API that tracks when GitHub users were last active.</b><br/>
   JSON, plain text, and Shields.io badge output. Optional token for higher rate limits.<br/>
   Built for README embeds, Telegram bots, and developer dashboards.
 </p>
@@ -43,8 +43,9 @@
 
 - [Overview](#-overview)
 - [Features](#-features)
-- [How It Works](#-how-it-works)
+- [Supported Events](#-supported-events)
 - [Tech Stack](#-tech-stack)
+- [Architecture](#-architecture)
 - [Project Structure](#-project-structure)
 - [Quick Start](#-quick-start)
 - [Configuration](#-configuration)
@@ -57,7 +58,9 @@
 - [Changelog Highlights](#-changelog-highlights)
 - [Troubleshooting](#-troubleshooting)
 - [FAQ](#-faq)
+- [Roadmap](#-roadmap)
 - [Contributing](#-contributing)
+- [Acknowledgements](#-acknowledgements)
 - [License](#-license)
 - [Author](#-author)
 - [Star History](#-star-history)
@@ -174,16 +177,81 @@ flowchart TD
 
 ---
 
-## 🛠 Tech Stack
+## 📡 Supported Events
 
-| Technology | Purpose |
-|:---|:---|
-| **Node.js 20+** | Runtime |
-| **Express 5.1** | HTTP server (local dev) |
-| **Axios** | GitHub API client |
-| **node-cache** | In-memory caching |
-| **Vercel** | Serverless deployment |
-| **Shields.io** | Badge rendering |
+| Event Type | Label | Description |
+|:---|:---|:---|
+| `PushEvent` | pushed code | Committed or pushed to a repo |
+| `CreateEvent` | created a repo/branch | Created a repo, branch, or tag |
+| `DeleteEvent` | deleted a branch/tag | Deleted a branch or tag |
+| `IssuesEvent` | opened/closed an issue | Opened, closed, or reopened an issue |
+| `IssueCommentEvent` | commented on an issue | Commented on an issue or PR |
+| `PullRequestEvent` | opened/closed a PR | Opened, closed, or merged a PR |
+| `PullRequestReviewEvent` | reviewed a PR | Submitted a PR review |
+| `ReleaseEvent` | published a release | Published or edited a release |
+| `WatchEvent` | starred a repo | Starred a repository |
+| `ForkEvent` | forked a repo | Forked a repository |
+| `GollumEvent` | edited a wiki | Created or edited a wiki page |
+| `PublicEvent` | made a repo public | Made a private repo public |
+
+> 💡 Events are fetched from GitHub's `/users/{username}/events/public` endpoint. Only the most recent event is used.
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology | Purpose | Version | Documentation |
+|:---|:---|:---|:---|
+| 🟢 [Node.js](https://nodejs.org/) | JavaScript runtime | >= 20 | [Docs](https://nodejs.org/docs/) |
+| ⚡ [Express](https://expressjs.com/) | HTTP server framework | 5.1 | [Docs](https://expressjs.com/en/5x/api.html) |
+| ▲ [Vercel Functions](https://vercel.com/docs/functions) | Serverless deployment | — | [Docs](https://vercel.com/docs/functions) |
+| 🌐 [Axios](https://axios-http.com/) | HTTP client for GitHub API | 1.7 | [Docs](https://axios-http.com/docs/intro) |
+| 💾 [node-cache](https://github.com/ptarjan/node-cache) | In-memory caching | 5.1 | [Docs](https://github.com/ptarjan/node-cache) |
+
+### 📦 Key Dependencies
+
+```json
+{
+  "express": "^5.1.0",
+  "axios": "^1.7.2",
+  "node-cache": "^5.1.2"
+}
+```
+
+---
+
+## 🏗️ Architecture
+
+### Request Flow
+
+| Stage | Component | Description |
+|:-----:|-----------|-------------|
+| 1 | **Client** | Browser, bot, or `curl` sends request |
+| 2 | **Vercel Edge / Express** | Routes request, applies CORS + security headers + rate limit |
+| 3 | **Cache Check** | `node-cache` with 5-min TTL — hit = instant response |
+| 4 | **GitHub API** | Fetch `/users/{username}/events/public` (1 event) |
+| 5 | **Extract** | Parse most recent event type, repo, timestamp |
+| 6 | **Format & Respond** | Calculate relative time → JSON / Text / Badge |
+
+### Caching Architecture
+
+```mermaid
+flowchart TD
+    A["📥 Request"] --> B{"🧠 Memory Cache<br/>(node-cache)"}
+    B -- HIT --> C["⚡ Return Cached<br/>~5ms"]
+    B -- MISS --> D["📡 GitHub Events API<br/>(/users/:username/events/public)"]
+    D --> E["💾 Cache Result<br/>(5min TTL)"]
+    E --> F["📤 Return Fresh"]
+
+    style A fill:#1e1e2e,stroke:#a78bfa,color:#f1f5f9
+    style B fill:#1e1e2e,stroke:#f43f8e,color:#f1f5f9
+    style C fill:#1e1e2e,stroke:#22c55e,color:#f1f5f9
+    style D fill:#1e1e2e,stroke:#eab308,color:#f1f5f9
+    style E fill:#1e1e2e,stroke:#a855f7,color:#f1f5f9
+    style F fill:#1e1e2e,stroke:#22c55e,color:#f1f5f9
+```
+
+> 💡 Cache TTL is configurable via `CACHE_TTL` env var (default: 300 seconds). Cache stats are available at `/api/health`.
 
 ---
 
@@ -191,23 +259,28 @@ flowchart TD
 
 ```
 MyLastSeen/
-├── api/
-│   ├── lastseen.js      # GET /api/lastseen/:username  (+ /text)
-│   ├── badge.js         # GET /api/lastseen/:username/badge
-│   └── health.js        # GET /api/health
-├── utils/
-│   ├── github.js        # GitHub API client
-│   ├── cacheHandler.js  # In-memory cache wrapper
-│   ├── constants.js     # App constants & config
-│   └── relativeTime.js  # Date → "2 hours ago" formatter
-├── public/
-│   └── index.html       # Landing page
-├── server.js            # Express server (local dev)
-├── index.js             # Vercel serverless entry
-├── test.js              # Integration tests
-├── vercel.json          # Vercel config
-├── package.json
-└── CHANGELOG.md
+├── 📂 api/                            # 🌐 Vercel serverless functions
+│   ├── 📄 lastseen.js                 #    👤 Last seen endpoint (JSON + text)
+│   ├── 📄 badge.js                    #    🏷️ Shields.io badge endpoint
+│   └── 📄 health.js                   #    💚 Health check endpoint
+│
+├── 📂 utils/                          # ⚙️ Core logic
+│   ├── 📄 github.js                   #    📡 GitHub API client
+│   ├── 📄 cacheHandler.js             #    💾 In-memory cache wrapper
+│   ├── 📄 constants.js                #    📌 Shared config & defaults
+│   └── 📄 relativeTime.js             #    ⏱️ Date → "2 hours ago" formatter
+│
+├── 📂 public/
+│   └── 📄 index.html                  #    🏠 Landing page
+│
+├── 📄 server.js                       # 🚀 Express server entry point
+├── 📄 index.js                        # ▲ Vercel serverless entry point
+├── 📄 test.js                         # 🧪 Integration test suite
+├── 📄 vercel.json                     # ▲ Vercel routing & headers config
+├── 📄 package.json                    # 📦 Dependencies & scripts
+├── 📄 CHANGELOG.md                    # 📝 Version history
+├── 📄 LICENSE                         # 📜 MIT License
+└── 📄 README.md                       # 📖 This file
 ```
 
 ---
@@ -216,39 +289,48 @@ MyLastSeen/
 
 ### Prerequisites
 
-- Node.js 20 or later
-- npm or yarn
+| Requirement | Minimum | Recommended |
+|:---|:---|:---|
+| 📦 Node.js | 20.x | 20.x LTS |
+| 📦 npm | 9.0+ | 10.x |
+| 💻 OS | Windows, macOS, Linux | Any |
 
-### Installation
+### 🔧 Installation
 
 ```bash
+# 1️⃣ Clone the repository
 git clone https://github.com/Shineii86/MyLastSeen.git
 cd MyLastSeen
+
+# 2️⃣ Install dependencies
 npm install
-```
 
-### Run Locally
-
-```bash
+# 3️⃣ Start development server
 npm run dev
 ```
 
-Server starts at `http://localhost:3000`.
+> 🌐 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### Test It
+### 🏗️ Build for Production
 
 ```bash
-# JSON response
-curl http://localhost:3000/api/lastseen/Shineii86
+# Start production server
+npm start
 
-# Plain text
-curl http://localhost:3000/api/lastseen/Shineii86/text
+# Run tests
+npm test
+```
 
-# Badge JSON (for Shields.io)
-curl http://localhost:3000/api/lastseen/Shineii86/badge
+### 🐳 Alternative Package Managers
 
-# Health check
-curl http://localhost:3000/api/health
+```bash
+# Using yarn
+yarn install
+yarn dev
+
+# Using pnpm
+pnpm install
+pnpm dev
 ```
 
 ---
@@ -265,8 +347,15 @@ curl http://localhost:3000/api/health
 
 | Mode | Limit | Setup |
 |:---|:---|:---|
-| Without token | 60 req/hr | None |
-| With token | 5000 req/hr | Set `GITHUB_TOKEN` env or pass `?token=` |
+| Without token | 60 req/hr | None — works out of the box |
+| With token | 5000 req/hr | Set `GITHUB_TOKEN` env or pass `?token=` query param |
+
+### 🔑 Getting a GitHub Token
+
+1. Go to [GitHub Settings → Developer Settings → Personal Access Tokens](https://github.com/settings/tokens)
+2. Click **Generate new token (classic)**
+3. No scopes needed — public events don't require any permissions
+4. Copy the token and set it as `GITHUB_TOKEN` env var
 
 ---
 
@@ -291,6 +380,10 @@ curl https://mylastseen.vercel.app/api/lastseen/Shineii86
     "eventLabel": "pushed code",
     "eventRepo": "Shineii86/AniNewsAPI",
     "cached": false
+  },
+  "meta": {
+    "responseTime": "120ms",
+    "timestamp": "2026-05-28T14:00:00Z"
   }
 }
 ```
@@ -361,23 +454,8 @@ curl https://mylastseen.vercel.app/api/health
 | `data.eventLabel` | `string` | Human-readable label (e.g., "pushed code") |
 | `data.eventRepo` | `string` | Repository the activity was on |
 | `data.cached` | `boolean` | Whether response was served from cache |
-
-### Supported Event Types
-
-| Event Type | Label |
-|:---|:---|
-| `PushEvent` | pushed code |
-| `CreateEvent` | created a repo/branch |
-| `DeleteEvent` | deleted a branch/tag |
-| `IssuesEvent` | opened/closed an issue |
-| `IssueCommentEvent` | commented on an issue |
-| `PullRequestEvent` | opened/closed a PR |
-| `PullRequestReviewEvent` | reviewed a PR |
-| `ReleaseEvent` | published a release |
-| `WatchEvent` | starred a repo |
-| `ForkEvent` | forked a repo |
-| `GollumEvent` | edited a wiki |
-| `PublicEvent` | made a repo public |
+| `meta.responseTime` | `string` | Server response time |
+| `meta.timestamp` | `string` | Server timestamp |
 
 ---
 
@@ -506,6 +584,16 @@ A: 60 req/hr without a token, 5000 req/hr with one. Cached responses don't count
 
 ---
 
+## 🗺️ Roadmap
+
+- [ ] User contribution graph data
+- [ ] Multiple user batch lookup
+- [ ] Webhook notifications for user activity
+- [ ] Activity streak tracking
+- [ ] GraphQL API support
+
+---
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please read the steps below.
@@ -517,6 +605,14 @@ Contributions are welcome! Please read the steps below.
 5. Open a Pull Request
 
 Please ensure all tests pass before submitting.
+
+---
+
+## 🙏 Acknowledgements
+
+- [GitHub API](https://docs.github.com/en/rest/activity/events) — Public events endpoint
+- [Shields.io](https://shields.io/) — Badge rendering service
+- [Vercel](https://vercel.com/) — Serverless deployment platform
 
 ---
 
