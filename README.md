@@ -618,32 +618,55 @@ Please ensure all tests pass before submitting.
 
 ## 📄 License
 
-This project is licensed under the [MIT License](LICENSE).
+<div align="center">
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge&logo=mit&logoColor=white)](./LICENSE)
+
+This project is licensed under the **MIT License**.
+
+Free to use, modify, and distribute — see the [LICENSE](LICENSE) file for details.
+
+</div>
 
 ---
 
-## 👨‍💻 Author
+## 👤 Author
 
-**Shinei Nouzen**
+<div align="center">
 
-- GitHub: [@Shineii86](https://github.com/Shineii86)
-- Twitter: [@shineii86](https://x.com/shineii86)
-- Telegram: [@shineii86](https://telegram.me/shineii86)
+  <a href="https://github.com/Shineii86/MyLastSeen">
+  <img src="https://github.com/AniWaifuBot/Waifus/blob/main/Source/Banner.png" alt="Banner" width="100%" />
+  </a>
+
+</div>
+
+<p align="center">
+  <b style="font-size: 5.5em;">Shinei Nouzen</b>
+  <br/>
+  <sub>Full-Stack Developer & Anime Enthusiast</sub>
+  <br/><br/>
+  <a href="https://github.com/Shineii86"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"/></a>
+  <a href="https://telegram.me/Shineii86"><img src="https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram"/></a>
+  <a href="https://instagram.com/ikx7.a"><img src="https://img.shields.io/badge/Instagram-C13584?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram"/></a>
+  <a href="mailto:ikx7a@hotmail.com"><img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email"/></a>
+</p>
 
 ---
 
 ## ⭐ Star History
 
-<a href="https://star-history.com/#Shineii86/MyLastSeen&Date">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=Shineii86/MyLastSeen&type=Date&theme=dark" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=Shineii86/MyLastSeen&type=Date" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=Shineii86/MyLastSeen&type=Date" width="100%" />
-  </picture>
-</a>
+<p align="center">
+  <a href="https://star-history.com/#Shineii86/MyLastSeen&Date">
+    <img src="https://api.star-history.com/svg?repos=Shineii86/MyLastSeen&type=Date" alt="Star History Chart" width="100%"/>
+  </a>
+</p>
+
+> ⭐ If you found this project useful, please consider giving it a star!
 
 ---
 
 <p align="center">
-  Made with 💜 by <a href="https://github.com/Shineii86">Shinei Nouzen</a>
+  <b>Made With ❤️ For The Developer Community</b>
+  <br/><br/>
+  <sub>&copy; 2026 Shineii86. All Rights Reserved.</sub>
 </p>
