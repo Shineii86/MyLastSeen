@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## [1.0.0] — 2026-05-28
 
+### Changed
+- Upgraded README.md to AniNewsAPI-style layout — capsule banner, badge rows, mermaid flowchart, feature tables, star history
+- Upgraded index.html with dark theme, ambient background orbs, interactive playground, badge color cards, scroll reveal animations
+- Fixed vercel.json badge rewrite to route `/api/lastseen/:username/badge` → `/api/badge/:username`
+
+## [1.0.0] — 2026-05-28
+
 ### Added
 - Initial release of MyLastSeen API
 - `GET /api/lastseen/:username` — JSON last-seen response with activity type, repo, relative time
