@@ -7,10 +7,11 @@
  *   Shields.io endpoint badge handler. Returns JSON in the
  *   Shields.io endpoint badge schema format, compatible with
  *   shields.io/endpoint?url= badges for README files.
+ *   Supports custom label, logo, style, and logoColor.
  *
  * @endpoint GET /api/lastseen/:username/badge
  *
- * @version 1.0.0
+ * @version 2.0.0
  * @author  Shinei Nouzen
  * @license MIT
  * ======= • ======= • ======= • ======= • =======• =======
@@ -52,35 +53,40 @@ function getBadgeColor(isoDate) {
 /**
  * Main request handler for GET /api/lastseen/:username/badge.
  *
- * Returns Shields.io endpoint badge JSON:
- * {
- *   schemaVersion: 1,
- *   label: "last seen",
- *   message: "2 hours ago",
- *   color: "brightgreen",
- *   namedLogo: "github",
- *   cacheSeconds: 300
- * }
+ * Query parameters:
+ *   - label   — Custom badge label (default: "last seen")
+ *   - logo    — Custom logo name (default: "github")
+ *   - style   — Badge style: flat, flat-square, for-the-badge, plastic (default: "flat")
+ *   - logoColor — Custom logo color (default: none)
+ *   - cacheSeconds — Custom cache duration (default: 300)
  *
  * Usage in README.md:
  * ![Last Seen](https://img.shields.io/endpoint?url=https://mylastseen.vercel.app/api/lastseen/USERNAME/badge)
+ * ![Last Seen](https://img.shields.io/endpoint?style=for-the-badge&url=https://mylastseen.vercel.app/api/lastseen/USERNAME/badge)
  */
 module.exports = async (req, res) => {
   Object.entries(CORS_HEADERS).forEach(([k, v]) => res.setHeader(k, v));
   if (req.method === 'OPTIONS') { res.status(204).end(); return; }
 
   try {
-    const username = req.query.username?.trim();
+    const username = (req.query.username || req.params?.username)?.trim();
     const token = req.query.token || process.env.GITHUB_TOKEN || null;
     const forceRefresh = req.query.refresh === 'true';
 
+    // ─── Badge customization params ───
+    const label = req.query.label || 'last seen';
+    const logo = req.query.logo || 'github';
+    const style = req.query.style || 'flat';
+    const logoColor = req.query.logoColor || undefined;
+    const cacheSeconds = parseInt(req.query.cacheSeconds) || 300;
+
     // ─── Validate username ───
     if (!username) {
-      return res.status(400).json({
+      return res.status(200).json({
         schemaVersion: 1,
-        label: 'last seen',
+        label,
         message: 'missing username',
-        color: 'red'
+        color: 'lightgrey'
       });
     }
 
@@ -104,22 +110,27 @@ module.exports = async (req, res) => {
 
     // ─── Shields.io endpoint badge response ───
     res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Cache-Control', 'public, max-age=300');
+    res.setHeader('Cache-Control', `public, max-age=${cacheSeconds}`);
 
-    res.json({
+    const badge = {
       schemaVersion: 1,
-      label: 'last seen',
+      label,
       message: relative,
       color,
-      namedLogo: 'github',
-      cacheSeconds: 300
-    });
+      namedLogo: logo,
+      style,
+      cacheSeconds
+    };
+
+    if (logoColor) badge.logoColor = logoColor;
+
+    res.json(badge);
   } catch (error) {
     // Shields.io expects 200 with error badge on failure
     res.setHeader('Content-Type', 'application/json');
     res.status(200).json({
       schemaVersion: 1,
-      label: 'last seen',
+      label: req.query.label || 'last seen',
       message: error.error === 'User not found' ? 'user not found' : 'error',
       color: 'lightgrey',
       cacheSeconds: 60

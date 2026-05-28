@@ -2,8 +2,14 @@
   "rewrites": [
     { "source": "/api/lastseen/([^/]+)/text", "destination": "/api/lastseen?username=$1&format=text" },
     { "source": "/api/lastseen/([^/]+)/badge", "destination": "/api/badge?username=$1" },
-    { "source": "/api/lastseen/([^/]+)", "destination": "/api/lastseen?username=$1" }
+    { "source": "/api/lastseen/([^/]+)", "destination": "/api/lastseen?username=$1" },
+    { "source": "/api/score/([^/]+)", "destination": "/api/score?username=$1" },
+    { "source": "/api/history/([^/]+)", "destination": "/api/history?username=$1" },
+    { "source": "/api/org/([^/]+)/lastseen", "destination": "/api/org?orgname=$1" }
   ],
+  "functions": {
+    "api/*.js": { "memory": 256 }
+  },
   "headers": [
     { "source": "/api/(.*)", "headers": [
       { "key": "Access-Control-Allow-Origin", "value": "*" },

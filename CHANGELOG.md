@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.0] — 2026-05-28
+
+### Added
+- `GET /api/batch?users=a,b,c` — batch lookup for up to 10 users in one request
+- `GET /api/score/:username` — activity score (0-100) with S/A/B/C/D/F grade
+- `GET /api/history/:username` — last 10 public events with timestamps
+- `GET /api/org/:orgname/lastseen` — track all members of a GitHub organization
+- `GET /api/compare?user1=X&user2=Y` — compare two users side by side
+- `GET /api/rate-limit` — GitHub API quota dashboard
+- Badge customization: `?label=`, `?logo=`, `?style=`, `?logoColor=`, `?cacheSeconds=`
+- Landing page: Activity Timeline in search results
+- Landing page: Badge Builder with live preview and markdown copy
+- Landing page: User Comparison section
+- Landing page: Rate Limit Dashboard
+
+### Fixed
+- Express/req.params vs req.query fallback — handlers now support both Vercel and Express routing
+- Removed dead `getBadgeColor()` from lastseen.js
+
+### Changed
+- Bumped version to 2.0.0
+- Updated features grid, endpoint docs, and stats ribbon for 10 endpoints
+- Updated nav links for new sections
+
 ## [1.0.0] — 2026-05-28
 
 ### Changed

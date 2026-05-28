@@ -744,6 +744,380 @@
     .endpoint-example .url { color: var(--accent-light); }
 
     /* ═══════════════════════════════════════
+       TIMELINE
+    ═══════════════════════════════════════ */
+    .timeline {
+      margin-top: 16px;
+      border-top: 1px solid var(--border);
+      padding: 16px 24px 20px;
+    }
+
+    .timeline-title {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .timeline-list {
+      list-style: none;
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .timeline-list::before {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 4px;
+      bottom: 4px;
+      width: 2px;
+      background: var(--border);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding: 4px 0 12px 16px;
+      font-size: 0.85rem;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -18px;
+      top: 10px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--bg-elevated);
+    }
+
+    .timeline-item:first-child::before {
+      background: var(--accent-emerald);
+      box-shadow: 0 0 6px var(--accent-emerald);
+    }
+
+    .timeline-event {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .timeline-repo {
+      color: var(--accent-light);
+      font-size: 0.8rem;
+    }
+
+    .timeline-time {
+      color: var(--text-muted);
+      font-size: 0.78rem;
+    }
+
+    /* ═══════════════════════════════════════
+       BADGE BUILDER
+    ═══════════════════════════════════════ */
+    .builder-section {
+      padding: 80px 0;
+    }
+
+    .builder-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .builder-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .builder-controls {
+      background: var(--bg-base);
+      padding: 28px;
+    }
+
+    .builder-preview {
+      background: var(--bg-base);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .builder-field {
+      margin-bottom: 16px;
+    }
+
+    .builder-field label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .builder-field input, .builder-field select {
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--bg-deep);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xs);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .builder-field input:focus, .builder-field select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-glow);
+    }
+
+    .builder-badge-preview {
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .builder-badge-preview img {
+      height: 32px;
+    }
+
+    .builder-code {
+      background: var(--bg-deep);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 18px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--accent-light);
+      overflow-x: auto;
+      width: 100%;
+      position: relative;
+    }
+
+    .builder-code .copy-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: var(--accent-glow);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      color: var(--accent-light);
+      padding: 4px 10px;
+      border-radius: var(--radius-xs);
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .builder-code .copy-btn:hover {
+      background: var(--accent);
+      color: white;
+    }
+
+    /* ═══════════════════════════════════════
+       COMPARISON
+    ═══════════════════════════════════════ */
+    .compare-section {
+      padding: 80px 0;
+    }
+
+    .compare-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .compare-inputs {
+      display: flex;
+      gap: 12px;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .compare-inputs input {
+      flex: 1;
+      min-width: 150px;
+      padding: 12px 16px;
+      background: var(--bg-deep);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xs);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .compare-inputs input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-glow);
+    }
+
+    .compare-inputs button {
+      padding: 12px 24px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: var(--radius-xs);
+      font-family: var(--font-body);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .compare-inputs button:hover {
+      background: var(--accent-light);
+    }
+
+    .compare-results {
+      display: none;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .compare-results.show {
+      display: grid;
+    }
+
+    .compare-user {
+      background: var(--bg-base);
+      padding: 24px;
+    }
+
+    .compare-user-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .compare-user-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+    }
+
+    .compare-user-name {
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .compare-stat {
+      text-align: center;
+      padding: 8px 0;
+    }
+
+    .compare-stat-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .compare-stat-value {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .compare-vs {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: var(--bg-deep);
+      border-top: 1px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .compare-vs strong {
+      color: var(--accent-light);
+    }
+
+    .compare-error {
+      padding: 16px 24px;
+      color: var(--accent-rose);
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    /* ═══════════════════════════════════════
+       RATE LIMIT DASHBOARD
+    ═══════════════════════════════════════ */
+    .ratelimit-section {
+      padding: 80px 0;
+    }
+
+    .ratelimit-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+    }
+
+    .ratelimit-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .ratelimit-card {
+      background: var(--bg-base);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      text-align: center;
+    }
+
+    .ratelimit-value {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .ratelimit-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .ratelimit-bar {
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      margin-top: 12px;
+      overflow: hidden;
+    }
+
+    .ratelimit-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.6s ease-out;
+    }
+
+    .ratelimit-bar-fill.good { background: var(--accent-emerald); }
+    .ratelimit-bar-fill.warn { background: var(--accent-amber); }
+    .ratelimit-bar-fill.bad { background: var(--accent-rose); }
+
+    /* ═══════════════════════════════════════
        CHECK USER / SEARCH
     ═══════════════════════════════════════ */
     .check-section {
@@ -1328,6 +1702,9 @@
 
       .endpoint-desc { display: none !important; }
 
+      .builder-grid { grid-template-columns: 1fr; }
+      .compare-results { grid-template-columns: 1fr; }
+      .ratelimit-grid { grid-template-columns: 1fr; }
       .footer-inner { flex-direction: column; text-align: center; }
     }
 
@@ -1364,7 +1741,8 @@
       <nav>
         <a href="#features">Features</a>
         <a href="#docs">Docs</a>
-        <a href="#tryit">Playground</a>
+        <a href="#check">Check</a>
+        <a href="#builder">Badge Builder</a>
         <a href="https://github.com/Shineii86/MyLastSeen" target="_blank" class="nav-cta"><i class="fab fa-github"></i> GitHub</a>
       </nav>
     </div>
@@ -1375,7 +1753,7 @@
     <div class="container">
       <div class="hero-badge">
         <span class="dot"></span>
-        <span id="hero-version">v1.0.0</span> — 4 endpoints, Shields.io ready
+        <span id="hero-version">v2.0.0</span> — 10 endpoints, Shields.io ready
       </div>
 
       <h1>
@@ -1435,7 +1813,7 @@
           <div class="stat-label">Version</div>
         </div>
         <div class="stat-cell">
-          <div class="stat-number emerald">4</div>
+          <div class="stat-number emerald">10</div>
           <div class="stat-label">Endpoints</div>
         </div>
       </div>
@@ -1481,6 +1859,36 @@
           <h3>Vercel Ready</h3>
           <p>Deploy instantly as a serverless function. Zero config, zero maintenance.</p>
         </div>
+        <div class="feature-card">
+          <div class="feature-icon fi-violet"><i class="fas fa-layer-group"></i></div>
+          <h3>Batch Lookup</h3>
+          <p>Check up to 10 users in a single request: <code>/api/batch?users=a,b,c</code></p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon fi-pink"><i class="fas fa-chart-line"></i></div>
+          <h3>Activity Score</h3>
+          <p>Get a 0-100 activity score with S/A/B/C/D/F grading: <code>/api/score/:user</code></p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon fi-cyan"><i class="fas fa-timeline"></i></div>
+          <h3>Event History</h3>
+          <p>See the last 10 public events with timestamps: <code>/api/history/:user</code></p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon fi-emerald"><i class="fas fa-building"></i></div>
+          <h3>Org Tracking</h3>
+          <p>Track all members of a GitHub organization: <code>/api/org/:name/lastseen</code></p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon fi-amber"><i class="fas fa-code-compare"></i></div>
+          <h3>User Comparison</h3>
+          <p>Compare two users side by side: <code>/api/compare?user1=X&user2=Y</code></p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon fi-rose"><i class="fas fa-gauge-high"></i></div>
+          <h3>Rate Limit Dashboard</h3>
+          <p>Check remaining GitHub API quota: <code>/api/rate-limit</code></p>
+        </div>
       </div>
     </div>
   </section>
@@ -1491,7 +1899,7 @@
       <div class="section-header">
         <span class="section-label">Documentation</span>
         <h2>API Endpoints</h2>
-        <p>Four simple endpoints — JSON, text, badge, and health check</p>
+        <p>10 endpoints — last seen, batch, score, history, org, compare, badge, rate limit, health</p>
       </div>
 
       <div class="endpoints-stack">
@@ -1554,6 +1962,96 @@
             </div>
           </div>
         </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header" onclick="this.parentElement.classList.toggle('open')">
+            <span class="method-badge badge-get">GET</span>
+            <span class="endpoint-path">/api/batch?users=a,b,c</span>
+            <span class="endpoint-desc">Batch lookup (max 10 users)</span>
+            <span class="endpoint-expand"><i class="fas fa-chevron-down"></i></span>
+          </div>
+          <div class="endpoint-body">
+            <p>Fetch last-seen data for up to 10 users in a single request using parallel fetches.</p>
+            <div class="endpoint-example">
+              <span class="prompt">$</span> curl <span class="url">https://mylastseen.vercel.app/api/batch?users=Shineii86,torvalds</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header" onclick="this.parentElement.classList.toggle('open')">
+            <span class="method-badge badge-get">GET</span>
+            <span class="endpoint-path">/api/score/:username</span>
+            <span class="endpoint-desc">Activity score 0-100 with grade</span>
+            <span class="endpoint-expand"><i class="fas fa-chevron-down"></i></span>
+          </div>
+          <div class="endpoint-body">
+            <p>Computes activity score based on recency (0-50) and frequency (0-50). Returns S/A/B/C/D/F grade.</p>
+            <div class="endpoint-example">
+              <span class="prompt">$</span> curl <span class="url">https://mylastseen.vercel.app/api/score/Shineii86</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header" onclick="this.parentElement.classList.toggle('open')">
+            <span class="method-badge badge-get">GET</span>
+            <span class="endpoint-path">/api/history/:username</span>
+            <span class="endpoint-desc">Last 10 events with timestamps</span>
+            <span class="endpoint-expand"><i class="fas fa-chevron-down"></i></span>
+          </div>
+          <div class="endpoint-body">
+            <p>Returns the last 10 public events with event type, label, repo, and relative time.</p>
+            <div class="endpoint-example">
+              <span class="prompt">$</span> curl <span class="url">https://mylastseen.vercel.app/api/history/Shineii86</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header" onclick="this.parentElement.classList.toggle('open')">
+            <span class="method-badge badge-get">GET</span>
+            <span class="endpoint-path">/api/org/:orgname/lastseen</span>
+            <span class="endpoint-desc">Organization members last seen</span>
+            <span class="endpoint-expand"><i class="fas fa-chevron-down"></i></span>
+          </div>
+          <div class="endpoint-body">
+            <p>Fetches all members of a GitHub organization and returns their last-seen data.</p>
+            <div class="endpoint-example">
+              <span class="prompt">$</span> curl <span class="url">https://mylastseen.vercel.app/api/org/vercel/lastseen</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header" onclick="this.parentElement.classList.toggle('open')">
+            <span class="method-badge badge-get">GET</span>
+            <span class="endpoint-path">/api/compare?user1=X&user2=Y</span>
+            <span class="endpoint-desc">Compare two users side by side</span>
+            <span class="endpoint-expand"><i class="fas fa-chevron-down"></i></span>
+          </div>
+          <div class="endpoint-body">
+            <p>Compares two users' last-seen activity and shows who is more active.</p>
+            <div class="endpoint-example">
+              <span class="prompt">$</span> curl <span class="url">https://mylastseen.vercel.app/api/compare?user1=Shineii86&user2=torvalds</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header" onclick="this.parentElement.classList.toggle('open')">
+            <span class="method-badge badge-get">GET</span>
+            <span class="endpoint-path">/api/rate-limit</span>
+            <span class="endpoint-desc">GitHub API quota status</span>
+            <span class="endpoint-expand"><i class="fas fa-chevron-down"></i></span>
+          </div>
+          <div class="endpoint-body">
+            <p>Shows remaining GitHub API quota for core and search rate limits.</p>
+            <div class="endpoint-example">
+              <span class="prompt">$</span> curl <span class="url">https://mylastseen.vercel.app/api/rate-limit</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -1600,6 +2098,10 @@
           <div class="result-footer">
             <code id="result-curl" class="result-curl"></code>
             <button id="result-copy" class="result-copy-btn" title="Copy curl command"><i class="fas fa-copy"></i></button>
+          </div>
+          <div id="result-timeline" class="timeline" style="display:none;">
+            <div class="timeline-title">Recent Activity</div>
+            <ul id="result-timeline-list" class="timeline-list"></ul>
           </div>
         </div>
       </div>
@@ -1662,6 +2164,116 @@
         <div class="badge-code">
           <button class="copy-btn" onclick="navigator.clipboard.writeText('![Last Seen](https://img.shields.io/endpoint?url=https://mylastseen.vercel.app/api/lastseen/Shineii86/badge)')">Copy</button>
           ![Last Seen](https://img.shields.io/endpoint?url=https://mylastseen.vercel.app/api/lastseen/Shineii86/badge)
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Badge Builder -->
+  <section id="builder" class="builder-section reveal">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">Badge Builder</span>
+        <h2>Customize Your Badge</h2>
+        <p>Build a Shields.io badge with custom label, style, and logo</p>
+      </div>
+      <div class="builder-box">
+        <div class="builder-grid">
+          <div class="builder-controls">
+            <div class="builder-field">
+              <label>GitHub Username</label>
+              <input id="builder-username" type="text" placeholder="Shineii86" value="Shineii86">
+            </div>
+            <div class="builder-field">
+              <label>Badge Label</label>
+              <input id="builder-label" type="text" placeholder="last seen" value="last seen">
+            </div>
+            <div class="builder-field">
+              <label>Badge Style</label>
+              <select id="builder-style">
+                <option value="flat" selected>flat</option>
+                <option value="flat-square">flat-square</option>
+                <option value="for-the-badge">for-the-badge</option>
+                <option value="plastic">plastic</option>
+              </select>
+            </div>
+            <div class="builder-field">
+              <label>Logo</label>
+              <select id="builder-logo">
+                <option value="github" selected>github</option>
+                <option value="eye">eye</option>
+                <option value="clock">clock</option>
+                <option value="activity">activity</option>
+                <option value="user">user</option>
+                <option value="none">none</option>
+              </select>
+            </div>
+            <div class="builder-field">
+              <label>Logo Color</label>
+              <input id="builder-logoColor" type="text" placeholder="white" value="">
+            </div>
+          </div>
+          <div class="builder-preview">
+            <div class="builder-badge-preview">
+              <img id="builder-badge-img" src="" alt="Badge preview">
+            </div>
+            <div class="builder-code">
+              <button class="copy-btn" id="builder-copy">Copy</button>
+              <code id="builder-markdown"></code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- User Comparison -->
+  <section id="compare" class="compare-section reveal">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">Compare</span>
+        <h2>Compare Two Users</h2>
+        <p>See who was more recently active</p>
+      </div>
+      <div class="compare-box">
+        <div class="compare-inputs">
+          <input id="compare-user1" type="text" placeholder="First username" value="Shineii86">
+          <input id="compare-user2" type="text" placeholder="Second username" value="torvalds">
+          <button id="compare-btn"><i class="fas fa-code-compare"></i> Compare</button>
+        </div>
+        <div id="compare-error" class="compare-error"></div>
+        <div id="compare-results" class="compare-results">
+          <div class="compare-user" id="compare-user1-card"></div>
+          <div class="compare-user" id="compare-user2-card"></div>
+        </div>
+        <div id="compare-vs" class="compare-vs" style="display:none;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Rate Limit Dashboard -->
+  <section id="ratelimit" class="ratelimit-section reveal">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">API Status</span>
+        <h2>GitHub Rate Limit</h2>
+        <p>Remaining API quota for this service</p>
+      </div>
+      <div class="ratelimit-box">
+        <div class="ratelimit-grid">
+          <div class="ratelimit-card">
+            <div class="ratelimit-value" id="rl-remaining">—</div>
+            <div class="ratelimit-label">Remaining</div>
+            <div class="ratelimit-bar"><div class="ratelimit-bar-fill good" id="rl-bar" style="width:0%"></div></div>
+          </div>
+          <div class="ratelimit-card">
+            <div class="ratelimit-value" id="rl-limit">—</div>
+            <div class="ratelimit-label">Limit</div>
+          </div>
+          <div class="ratelimit-card">
+            <div class="ratelimit-value" id="rl-reset">—</div>
+            <div class="ratelimit-label">Resets</div>
+          </div>
         </div>
       </div>
     </div>
@@ -1777,7 +2389,7 @@
     })();
   </script>
 
-  <!-- Check User Search -->
+  <!-- Check User Search + Timeline -->
   <script>
     (function() {
       const BASE = window.location.origin;
@@ -1796,8 +2408,12 @@
         errorBox.style.display = 'none';
 
         try {
-          const resp = await fetch(BASE + '/api/lastseen/' + encodeURIComponent(user));
-          const data = await resp.json();
+          const [lastseenResp, historyResp] = await Promise.all([
+            fetch(BASE + '/api/lastseen/' + encodeURIComponent(user)),
+            fetch(BASE + '/api/history/' + encodeURIComponent(user) + '?count=5')
+          ]);
+
+          const data = await lastseenResp.json();
 
           if (!data.success) {
             errorBox.textContent = data.message || 'User not found or no public activity.';
@@ -1823,6 +2439,27 @@
           document.getElementById('result-curl').textContent =
             'curl ' + BASE + '/api/lastseen/' + d.username;
 
+          // Timeline
+          const timelineBox = document.getElementById('result-timeline');
+          const timelineList = document.getElementById('result-timeline-list');
+          timelineList.innerHTML = '';
+          timelineBox.style.display = 'none';
+
+          if (historyResp.ok) {
+            const histData = await historyResp.json();
+            if (histData.success && histData.data.events.length > 0) {
+              histData.data.events.forEach(function(ev) {
+                const li = document.createElement('li');
+                li.className = 'timeline-item';
+                li.innerHTML = '<span class="timeline-event">' + ev.eventLabel + '</span>' +
+                  (ev.eventRepo ? ' <span class="timeline-repo">' + ev.eventRepo + '</span>' : '') +
+                  '<br><span class="timeline-time">' + ev.relativeTime + '</span>';
+                timelineList.appendChild(li);
+              });
+              timelineBox.style.display = 'block';
+            }
+          }
+
           resultBox.style.display = 'block';
         } catch (err) {
           errorBox.textContent = 'Failed to check user. Please try again.';
@@ -1842,6 +2479,137 @@
         this.innerHTML = '<i class="fas fa-check"></i>';
         setTimeout(() => { this.innerHTML = '<i class="fas fa-copy"></i>'; }, 1500);
       });
+    })();
+  </script>
+
+  <!-- Badge Builder -->
+  <script>
+    (function() {
+      const BASE = window.location.origin;
+      const fields = ['builder-username', 'builder-label', 'builder-style', 'builder-logo', 'builder-logoColor'];
+
+      function updateBadge() {
+        const user = document.getElementById('builder-username').value.trim() || 'Shineii86';
+        const label = document.getElementById('builder-label').value.trim() || 'last seen';
+        const style = document.getElementById('builder-style').value;
+        const logo = document.getElementById('builder-logo').value;
+        const logoColor = document.getElementById('builder-logoColor').value.trim();
+
+        let badgeUrl = BASE + '/api/lastseen/' + encodeURIComponent(user) + '/badge?label=' + encodeURIComponent(label) + '&style=' + style + '&logo=' + logo;
+        if (logoColor) badgeUrl += '&logoColor=' + encodeURIComponent(logoColor);
+
+        const shieldsUrl = 'https://img.shields.io/endpoint?url=' + encodeURIComponent(badgeUrl) + '&style=' + style;
+
+        document.getElementById('builder-badge-img').src = shieldsUrl;
+
+        const markdown = '![Last Seen](' + shieldsUrl + ')';
+        document.getElementById('builder-markdown').textContent = markdown;
+      }
+
+      fields.forEach(function(id) {
+        document.getElementById(id).addEventListener('input', updateBadge);
+        document.getElementById(id).addEventListener('change', updateBadge);
+      });
+
+      document.getElementById('builder-copy').addEventListener('click', function() {
+        const md = document.getElementById('builder-markdown').textContent;
+        navigator.clipboard.writeText(md);
+        this.textContent = 'Copied!';
+        setTimeout(() => { this.textContent = 'Copy'; }, 1500);
+      });
+
+      updateBadge();
+    })();
+  </script>
+
+  <!-- User Comparison -->
+  <script>
+    (function() {
+      const BASE = window.location.origin;
+      const btn = document.getElementById('compare-btn');
+      const errorBox = document.getElementById('compare-error');
+      const resultsBox = document.getElementById('compare-results');
+      const vsBox = document.getElementById('compare-vs');
+
+      function renderUser(card, u) {
+        if (u.error) {
+          card.innerHTML = '<p style="color:var(--accent-rose)">' + u.message + '</p>';
+          return;
+        }
+        card.innerHTML =
+          '<div class="compare-user-header">' +
+            '<img class="compare-user-avatar" src="https://github.com/' + u.username + '.png" alt="">' +
+            '<div class="compare-user-name">' + u.username + '</div>' +
+          '</div>' +
+          '<div class="compare-stat"><div class="compare-stat-label">Last Seen</div><div class="compare-stat-value">' + u.relativeTime + '</div></div>' +
+          '<div class="compare-stat"><div class="compare-stat-label">Activity</div><div class="compare-stat-value">' + u.eventLabel + '</div></div>' +
+          '<div class="compare-stat"><div class="compare-stat-label">Repository</div><div class="compare-stat-value" style="color:var(--accent-light)">' + (u.eventRepo || '—') + '</div></div>';
+      }
+
+      async function compare() {
+        const u1 = document.getElementById('compare-user1').value.trim();
+        const u2 = document.getElementById('compare-user2').value.trim();
+        if (!u1 || !u2) return;
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Comparing…';
+        resultsBox.classList.remove('show');
+        vsBox.style.display = 'none';
+        errorBox.style.display = 'none';
+
+        try {
+          const resp = await fetch(BASE + '/api/compare?user1=' + encodeURIComponent(u1) + '&user2=' + encodeURIComponent(u2));
+          const data = await resp.json();
+
+          if (!data.success) {
+            errorBox.textContent = data.message || 'Could not compare users.';
+            errorBox.style.display = 'block';
+            return;
+          }
+
+          renderUser(document.getElementById('compare-user1-card'), data.data.user1);
+          renderUser(document.getElementById('compare-user2-card'), data.data.user2);
+
+          if (data.data.comparison) {
+            vsBox.innerHTML = 'More active: <strong>' + data.data.comparison.moreActive + '</strong> (by ' + data.data.comparison.lastSeenDiff + ')';
+            vsBox.style.display = 'flex';
+          }
+
+          resultsBox.classList.add('show');
+        } catch (err) {
+          errorBox.textContent = 'Failed to compare users.';
+          errorBox.style.display = 'block';
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fas fa-code-compare"></i> Compare';
+        }
+      }
+
+      btn.addEventListener('click', compare);
+    })();
+  </script>
+
+  <!-- Rate Limit Dashboard -->
+  <script>
+    (async function() {
+      const BASE = window.location.origin;
+      try {
+        const resp = await fetch(BASE + '/api/rate-limit');
+        const data = await resp.json();
+        if (!data.success) return;
+
+        const core = data.data.core;
+        document.getElementById('rl-remaining').textContent = core.remaining.toLocaleString();
+        document.getElementById('rl-limit').textContent = core.limit.toLocaleString();
+
+        const resetDate = new Date(core.reset);
+        document.getElementById('rl-reset').textContent = resetDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        const pct = Math.round((core.remaining / core.limit) * 100);
+        const bar = document.getElementById('rl-bar');
+        bar.style.width = pct + '%';
+        bar.className = 'ratelimit-bar-fill ' + (pct > 50 ? 'good' : pct > 20 ? 'warn' : 'bad');
+      } catch (_) {}
     })();
   </script>
 </body>

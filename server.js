@@ -146,6 +146,12 @@ app.get('/api/health', require('./api/health.js'));
 app.get('/api/lastseen/:username', require('./api/lastseen.js'));
 app.get('/api/lastseen/:username/text', require('./api/lastseen.js'));
 app.get('/api/lastseen/:username/badge', require('./api/badge.js'));
+app.get('/api/batch', require('./api/batch.js'));
+app.get('/api/score/:username', require('./api/score.js'));
+app.get('/api/history/:username', require('./api/history.js'));
+app.get('/api/org/:orgname/lastseen', require('./api/org.js'));
+app.get('/api/compare', require('./api/compare.js'));
+app.get('/api/rate-limit', require('./api/rate-limit.js'));
 
 // ══════════════════════════════════════════════════════════════
 // ERROR HANDLING
@@ -165,6 +171,12 @@ app.use((req, res) => {
         'GET /api/lastseen/:username',
         'GET /api/lastseen/:username/text',
         'GET /api/lastseen/:username/badge',
+        'GET /api/batch?users=user1,user2',
+        'GET /api/score/:username',
+        'GET /api/history/:username',
+        'GET /api/org/:orgname/lastseen',
+        'GET /api/compare?user1=X&user2=Y',
+        'GET /api/rate-limit',
         'GET /api/health'
       ]
     });
@@ -183,7 +195,7 @@ app.use((err, req, res, next) => {
 
 // ---- FEATURE: Startup banner ----
 app.listen(PORT, () => {
-  console.log(`\n╔════════════════════════════════════════════════════════════╗\n║           👁️ ${APP_NAME} v${APP_VERSION} 👁️\n║   Server running on http://localhost:${PORT}\n║\n║   Endpoints:\n║   • GET /api/lastseen/:username\n║   • GET /api/lastseen/:username/text\n║   • GET /api/lastseen/:username/badge\n║   • GET /api/health\n╚════════════════════════════════════════════════════════════╝\n`);
+  console.log(`\n╔════════════════════════════════════════════════════════════╗\n║           👁️ ${APP_NAME} v${APP_VERSION} 👁️\n║   Server running on http://localhost:${PORT}\n║\n║   Endpoints:\n║   • GET /api/lastseen/:username\n║   • GET /api/lastseen/:username/text\n║   • GET /api/lastseen/:username/badge\n║   • GET /api/batch?users=user1,user2\n║   • GET /api/score/:username\n║   • GET /api/history/:username\n║   • GET /api/org/:orgname/lastseen\n║   • GET /api/compare?user1=X&user2=Y\n║   • GET /api/rate-limit\n║   • GET /api/health\n╚════════════════════════════════════════════════════════════╝\n`);
 });
 
 module.exports = app;

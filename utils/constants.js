@@ -10,9 +10,10 @@
  *
  * @exports
  *   APP_NAME, APP_VERSION, APP_DESCRIPTION,
- *   CACHE_TTL, GITHUB_API, CORS_HEADERS
+ *   CACHE_TTL, GITHUB_API, CORS_HEADERS,
+ *   MAX_BATCH_SIZE, MAX_HISTORY_COUNT, ACTIVITY_SCORE_WEIGHTS
  *
- * @version 1.0.0
+ * @version 2.0.0
  * @author  Shinei Nouzen
  * @license MIT
  * ======= • ======= • ======= • ======= • =======• =======
@@ -28,7 +29,7 @@ module.exports = {
   APP_NAME: 'MyLastSeen',
 
   /** @type {string} Semantic version — keep in sync with package.json */
-  APP_VERSION: '1.0.0',
+  APP_VERSION: '2.0.0',
 
   /** @type {string} Short description for API index */
   APP_DESCRIPTION: 'GitHub Last Seen API — Track when GitHub users were last active',
@@ -101,6 +102,56 @@ module.exports = {
     RepositoryEvent: 'updated a repository',
     RepositoryVulnerabilityAlertEvent: 'security alert'
   },
+
+  // ══════════════════════════════════════════════════════════════
+  // BATCH & HISTORY LIMITS
+  // ══════════════════════════════════════════════════════════════
+
+  // ---- FEATURE: Batch processing limits ----
+  /** @type {number} Maximum users per batch request */
+  MAX_BATCH_SIZE: 10,
+
+  /** @type {number} Maximum events per history request */
+  MAX_HISTORY_COUNT: 10,
+
+  // ══════════════════════════════════════════════════════════════
+  // ACTIVITY SCORING
+  // ══════════════════════════════════════════════════════════════
+
+  // ---- FEATURE: Activity score configuration ----
+  /**
+   * Weights for activity score calculation.
+   * Score = recency (0-50) + frequency (0-50)
+   * @type {Object}
+   */
+  ACTIVITY_SCORE_WEIGHTS: {
+    recency: { max: 50, thresholds: [
+      { hours: 1, score: 50 },
+      { hours: 6, score: 40 },
+      { hours: 24, score: 30 },
+      { hours: 72, score: 20 },
+      { hours: 168, score: 10 },
+      { hours: 720, score: 5 }
+    ]},
+    frequency: { max: 50, thresholds: [
+      { count: 10, score: 50 },
+      { count: 7, score: 40 },
+      { count: 5, score: 30 },
+      { count: 3, score: 20 },
+      { count: 1, score: 10 }
+    ]}
+  },
+
+  // ══════════════════════════════════════════════════════════════
+  // BATCH & LIMITS
+  // ══════════════════════════════════════════════════════════════
+
+  // ---- FEATURE: Batch and history limits ----
+  /** @type {number} Max users in batch lookup */
+  MAX_BATCH_SIZE: 10,
+
+  /** @type {number} Max events in history endpoint */
+  MAX_HISTORY_COUNT: 10,
 
   // ══════════════════════════════════════════════════════════════
   // CORS
