@@ -81,6 +81,7 @@ module.exports = (req, res) => {
         'GET /api/lastseen/:username': 'Get last seen info as JSON',
         'GET /api/lastseen/:username/text': 'Get last seen as plain text',
         'GET /api/lastseen/:username/badge': 'Shields.io endpoint badge',
+        'GET|POST /api/status': 'Get or set GitHub profile status via GH_TOKEN',
         'GET /api/health': 'Health check'
       },
       usage: {

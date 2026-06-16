@@ -29,7 +29,7 @@ module.exports = {
   APP_NAME: 'MyLastSeen',
 
   /** @type {string} Semantic version — keep in sync with package.json */
-  APP_VERSION: '2.0.0',
+  APP_VERSION: '3.0.0',
 
   /** @type {string} Short description for API index */
   APP_DESCRIPTION: 'GitHub Last Seen API — Track when GitHub users were last active',
@@ -165,7 +165,7 @@ module.exports = {
    */
   CORS_HEADERS: {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type'
   }
 };

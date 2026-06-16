@@ -152,6 +152,8 @@ app.get('/api/history/:username', require('./api/history.js'));
 app.get('/api/org/:orgname/lastseen', require('./api/org.js'));
 app.get('/api/compare', require('./api/compare.js'));
 app.get('/api/rate-limit', require('./api/rate-limit.js'));
+app.get('/api/status', require('./api/status.js'));
+app.post('/api/status', require('./api/status.js'));
 
 // ══════════════════════════════════════════════════════════════
 // ERROR HANDLING
@@ -195,7 +197,7 @@ app.use((err, req, res, next) => {
 
 // ---- FEATURE: Startup banner ----
 app.listen(PORT, () => {
-  console.log(`\n╔════════════════════════════════════════════════════════════╗\n║           👁️ ${APP_NAME} v${APP_VERSION} 👁️\n║   Server running on http://localhost:${PORT}\n║\n║   Endpoints:\n║   • GET /api/lastseen/:username\n║   • GET /api/lastseen/:username/text\n║   • GET /api/lastseen/:username/badge\n║   • GET /api/batch?users=user1,user2\n║   • GET /api/score/:username\n║   • GET /api/history/:username\n║   • GET /api/org/:orgname/lastseen\n║   • GET /api/compare?user1=X&user2=Y\n║   • GET /api/rate-limit\n║   • GET /api/health\n╚════════════════════════════════════════════════════════════╝\n`);
+  console.log(`\n╔════════════════════════════════════════════════════════════╗\n║           👁️ ${APP_NAME} v${APP_VERSION} 👁️\n║   Server running on http://localhost:${PORT}\n║\n║   Endpoints:\n║   • GET /api/lastseen/:username\n║   • GET /api/lastseen/:username/text\n║   • GET /api/lastseen/:username/badge\n║   • GET /api/batch?users=user1,user2\n║   • GET /api/score/:username\n║   • GET /api/history/:username\n║   • GET /api/org/:orgname/lastseen\n║   • GET /api/compare?user1=X&user2=Y\n║   • GET /api/rate-limit\n║   • GET|POST /api/status\n║   • GET /api/health\n╚════════════════════════════════════════════════════════════╝\n`);
 });
 
 module.exports = app;

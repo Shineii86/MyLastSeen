@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.0] — 2026-06-16
+
+### Added
+- `GET /api/status` — Read authenticated user's GitHub profile status via GH_TOKEN
+- `POST /api/status` — Set GitHub profile status ("What's happening") with custom message and emoji
+- `utils/statusSetter.js` — GitHub GraphQL API client for profile status mutations (set, clear, get)
+- GH_TOKEN environment variable support for status endpoint authentication
+- POST body supports: `message` (required, max 80 chars), `emoji` (optional), `expiresAt` (optional), `clear: true` (to clear status)
+
+### Changed
+- Bumped version to 3.0.0
+- Updated CORS headers to allow POST method for status endpoint
+- Updated API index and server startup banner with new status endpoint
+
 ## [2.0.0] — 2026-05-28
 
 ### Added

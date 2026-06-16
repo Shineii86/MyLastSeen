@@ -1,6 +1,6 @@
 {
   "name": "mylastseen",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "GitHub Last Seen API — Track when GitHub users were last active",
   "main": "server.js",
   "scripts": {
