@@ -35,7 +35,7 @@ jobs:
 
           if not events:
               status_msg = 'No recent activity'
-              emoji = '💤'
+              emoji = '🫠'
           else:
               event = events[0]
               last_event = event['created_at']
@@ -48,23 +48,23 @@ jobs:
 
               if diff < 60:
                   relative = 'just now'
-                  emoji = '🟢'
+                  emoji = '👀'
               elif diff < 3600:
                   mins = int(diff / 60)
                   relative = f'{mins} minute{"s" if mins > 1 else ""} ago'
-                  emoji = '🟢'
+                  emoji = '🫣'
               elif diff < 86400:
                   hours = int(diff / 3600)
                   relative = f'{hours} hour{"s" if hours > 1 else ""} ago'
-                  emoji = '🔵'
+                  emoji = '😶'
               elif diff < 604800:
                   days = int(diff / 86400)
                   relative = f'{days} day{"s" if days > 1 else ""} ago'
-                  emoji = '🟡'
+                  emoji = '😴'
               else:
                   weeks = int(diff / 604800)
                   relative = f'{weeks} week{"s" if weeks > 1 else ""} ago'
-                  emoji = '🔴'
+                  emoji = '🫥'
 
               # Event label
               labels = {
