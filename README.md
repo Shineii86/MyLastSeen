@@ -18,8 +18,8 @@
   <img src="https://img.shields.io/badge/Express-5.1-000000?style=flat-square&logo=express&logoColor=white" alt="Express"/>
   <img src="https://img.shields.io/badge/Vercel-Serverless-000000?style=flat-square&logo=vercel&logoColor=white" alt="Vercel"/>
   <img src="https://img.shields.io/badge/License-MIT-22c55e?style=flat-square&logo=mit&logoColor=white" alt="License"/>
-  <img src="https://img.shields.io/badge/Version-2.0.0-f43f8e?style=flat-square&logoColor=white" alt="Version"/>
-  <img src="https://img.shields.io/badge/Endpoints-10-6366f1?style=flat-square&logoColor=white" alt="Endpoints"/>
+  <img src="https://img.shields.io/badge/Version-3.0.0-f43f8e?style=flat-square&logoColor=white" alt="Version"/>
+  <img src="https://img.shields.io/badge/Endpoints-11-6366f1?style=flat-square&logoColor=white" alt="Endpoints"/>
 </p>
 
 <p align="center">
@@ -90,6 +90,8 @@
 - 🏢 **Org Tracking** — Track all members of a GitHub organization
 - ⚖️ **User Comparison** — Compare two users side by side
 - 📊 **Rate Limit Dashboard** — Monitor GitHub API quota
+- 🔄 **Auto Status Update** — GitHub Actions workflow keeps your profile status fresh
+- 🎯 **Profile Status Setter** — Set your GitHub "What's happening" status via API with GH_TOKEN
 
 ### How It Works
 
@@ -186,6 +188,8 @@ flowchart TD
 | ⚖️ User Comparison | Compare two users side by side | ✅ |
 | 📊 Rate Limit Dashboard | Monitor GitHub API quota | ✅ |
 | 🏷️ Badge Customization | Custom label, logo, style, logoColor | ✅ |
+| 🔄 Auto Status Update | GitHub Actions workflow for auto-updating profile status | ✅ |
+| 🎯 Profile Status Setter | Set GitHub "What's happening" status via GH_TOKEN | ✅ |
 | 🧪 Test Suite | Integration tests for all endpoints | ✅ |
 
 ---
@@ -281,13 +285,18 @@ MyLastSeen/
 │   ├── 📄 history.js                  #    🕐 Event history timeline
 │   ├── 📄 org.js                      #    🏢 Organization last seen
 │   ├── 📄 compare.js                  #    ⚖️ User comparison
-│   └── 📄 rate-limit.js              #    📊 Rate limit dashboard
+│   ├── 📄 rate-limit.js              #    📊 Rate limit dashboard
+│   └── 📄 status.js                   #    🎯 Profile status setter (GH_TOKEN)
 │
 ├── 📂 utils/                          # ⚙️ Core logic
 │   ├── 📄 github.js                   #    📡 GitHub API client
 │   ├── 📄 cacheHandler.js             #    💾 In-memory cache wrapper
 │   ├── 📄 constants.js                #    📌 Shared config & defaults
-│   └── 📄 relativeTime.js             #    ⏱️ Date → "2 hours ago" formatter
+│   ├── 📄 relativeTime.js             #    ⏱️ Date → "2 hours ago" formatter
+│   └── 📄 statusSetter.js             #    🔄 GraphQL status mutations
+│
+├── 📂 .github/workflows/              # 🤖 GitHub Actions
+│   └── 📄 update-status.yml           #    🔄 Auto-update profile status (every 5 min)
 │
 ├── 📂 public/
 │   └── 📄 index.html                  #    🏠 Landing page
@@ -359,7 +368,8 @@ pnpm dev
 | Environment Variable | Default | Description |
 |:---|:---|:---|
 | `PORT` | `3000` | Server port (local dev) |
-| `GITHUB_TOKEN` | — | GitHub PAT for higher rate limits |
+| `GITHUB_TOKEN` | — | GitHub PAT for higher rate limits (read endpoints) |
+| `GH_TOKEN` | — | GitHub PAT for profile status setter (needs `user` scope) |
 | `CACHE_TTL` | `300` | Cache TTL in seconds |
 
 ### Rate Limits
@@ -373,8 +383,9 @@ pnpm dev
 
 1. Go to [GitHub Settings → Developer Settings → Personal Access Tokens](https://github.com/settings/tokens)
 2. Click **Generate new token (classic)**
-3. No scopes needed — public events don't require any permissions
-4. Copy the token and set it as `GITHUB_TOKEN` env var
+3. For **read endpoints** (lastseen, batch, etc.): No scopes needed
+4. For **status setter** (`/api/status`): Select `user` scope
+5. Copy the token and set it as `GITHUB_TOKEN` or `GH_TOKEN` env var
 
 ---
 
@@ -451,7 +462,7 @@ curl https://mylastseen.vercel.app/api/health
   "success": true,
   "status": "healthy",
   "name": "MyLastSeen",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "uptime": 3600,
   "cache": { "hits": 42, "misses": 10, "keys": ["Shineii86"], "ttl": 300 }
 }
@@ -555,6 +566,63 @@ curl https://mylastseen.vercel.app/api/rate-limit
 }
 ```
 
+### `GET /api/status`
+
+Read the authenticated user's current GitHub profile status.
+
+```bash
+curl "https://mylastseen.vercel.app/api/status?token=ghp_xxxxx"
+```
+
+```json
+{
+  "success": true,
+  "data": {
+    "message": "Last seen: 2026-06-16 12:34 UTC",
+    "emoji": "🔍",
+    "expiresAt": null,
+    "indicatesLimitedAvailability": false
+  }
+}
+```
+
+### `POST /api/status`
+
+Set the authenticated user's GitHub profile status ("What's happening").
+
+```bash
+curl -X POST "https://mylastseen.vercel.app/api/status?token=ghp_xxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{"message": "Last seen", "emoji": "🔍"}'
+```
+
+**POST Body Parameters:**
+
+| Field | Type | Required | Description |
+|:---|:---|:---:|:---|
+| `message` | `string` | ✅ | Status message (max 80 characters) |
+| `emoji` | `string` | ❌ | Emoji to display (e.g., `"🔍"`, `"🚀"`, `"🌴"`) |
+| `expiresAt` | `string` | ❌ | ISO timestamp for auto-clear (e.g., `"2026-06-17T00:00:00Z"`) |
+| `clear` | `boolean` | ❌ | Set `true` to clear current status |
+
+**Set status with expiration:**
+
+```bash
+curl -X POST "https://mylastseen.vercel.app/api/status?token=ghp_xxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{"message": "On vacation", "emoji": "🌴", "expiresAt": "2026-06-20T00:00:00Z"}'
+```
+
+**Clear status:**
+
+```bash
+curl -X POST "https://mylastseen.vercel.app/api/status?token=ghp_xxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{"clear": true}'
+```
+
+> 💡 The token needs `user` scope to read/write profile status. Set `GH_TOKEN` env var or pass `?token=` query param.
+
 ---
 
 ## 📋 API Response Schema
@@ -638,6 +706,58 @@ GITHUB_TOKEN=ghp_xxxxx npm start
 
 ---
 
+## 🔄 Auto Status Update (GitHub Actions)
+
+MyLastSeen includes a GitHub Actions workflow that automatically updates your GitHub profile status every 5 minutes with a "Last seen" timestamp.
+
+### Setup
+
+1. Go to your repo → **Settings** → **Secrets and variables** → **Actions**
+2. Click **New repository secret**
+3. Add:
+   - **Name:** `GH_TOKEN`
+   - **Value:** Your GitHub PAT with `user` scope
+4. Save
+
+The workflow will run automatically every 5 minutes, setting your status to:
+```
+Last seen: 2026-06-16 12:34 UTC 🔍
+```
+
+### Manual Trigger
+
+Go to **Actions** → **Update GitHub Status** → **Run workflow** to trigger manually.
+
+### Workflow File
+
+```yaml
+# .github/workflows/update-status.yml
+name: Update GitHub Status
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # Every 5 minutes
+  workflow_dispatch:        # Manual trigger
+
+jobs:
+  update-status:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set "Last seen" status
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M UTC")
+          curl -s -X POST https://api.github.com/graphql \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "query": "mutation { changeUserStatus(input: {message: \"Last seen: '"$TIMESTAMP"'\", emoji: \"🔍\"}) { status { message emoji } } }"
+            }'
+```
+
+---
+
 ## 📜 Available Scripts
 
 | Script | Command | Description |
@@ -653,6 +773,7 @@ GITHUB_TOKEN=ghp_xxxxx npm start
 
 | Version | Date | Highlights |
 |:---|:---|:---|
+| **3.0.0** | 2026-06-16 | Profile status setter (`/api/status`), GH_TOKEN support, GitHub Actions auto-update workflow |
 | **2.0.0** | 2026-05-28 | 6 new endpoints (batch, score, history, org, compare, rate-limit), badge customization, landing page upgrades |
 | **1.0.0** | 2026-05-28 | Initial release — JSON, text, badge, health endpoints, Vercel support |
 
@@ -708,9 +829,11 @@ A: 60 req/hr without a token, 5000 req/hr with one. Cached responses don't count
 - [x] Multiple user batch lookup
 - [ ] Webhook notifications for user activity
 - [ ] Activity streak tracking
-- [ ] GraphQL API support
+- [x] GraphQL API support (profile status)
 - [ ] Redis/Upstash persistent cache
-- [ ] Rate limit dashboard
+- [x] Rate limit dashboard
+- [x] GitHub profile status setter
+- [x] Auto-update status via GitHub Actions
 
 ---
 
