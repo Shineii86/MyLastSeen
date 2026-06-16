@@ -4,20 +4,102 @@ on:
   schedule:
     - cron: '*/5 * * * *'  # Har 5 minute me
   workflow_dispatch:        # Manual trigger bhi
+    inputs:
+      timezone:
+        description: 'Timezone (e.g., Asia/Kolkata, UTC, America/New_York)'
+        required: false
+        default: 'Asia/Kolkata'
 
 jobs:
   update-status:
     runs-on: ubuntu-latest
     steps:
-      - name: Set "Last seen" status
+      - name: Set "Last seen" status with relative time
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          TZ: ${{ inputs.timezone || 'Asia/Kolkata' }}
         run: |
-          TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M UTC")
+          # Get user's last public event
+          LAST_EVENT=$(curl -s -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/users/Shineii86/events/public?per_page=1" \
+            | jq -r '.[0].created_at // empty')
+
+          if [ -z "$LAST_EVENT" ]; then
+            STATUS_MSG="No recent activity"
+            STATUS_EMOJI="💤"
+          else
+            # Calculate relative time
+            NOW=$(date +%s)
+            EVENT_TIME=$(date -d "$LAST_EVENT" +%s 2>/dev/null || date -j -f "%Y-%m-%dT%H:%M:%SZ" "$LAST_EVENT" +%s 2>/dev/null)
+            DIFF=$((NOW - EVENT_TIME))
+            
+            if [ $DIFF -lt 60 ]; then
+              RELATIVE="just now"
+              STATUS_EMOJI="🟢"
+            elif [ $DIFF -lt 3600 ]; then
+              MINS=$((DIFF / 60))
+              if [ $MINS -eq 1 ]; then
+                RELATIVE="1 minute ago"
+              else
+                RELATIVE="$MINS minutes ago"
+              fi
+              STATUS_EMOJI="🟢"
+            elif [ $DIFF -lt 86400 ]; then
+              HOURS=$((DIFF / 3600))
+              if [ $HOURS -eq 1 ]; then
+                RELATIVE="1 hour ago"
+              else
+                RELATIVE="$HOURS hours ago"
+              fi
+              STATUS_EMOJI="🔵"
+            elif [ $DIFF -lt 604800 ]; then
+              DAYS=$((DIFF / 86400))
+              if [ $DAYS -eq 1 ]; then
+                RELATIVE="1 day ago"
+              else
+                RELATIVE="$DAYS days ago"
+              fi
+              STATUS_EMOJI="🟡"
+            else
+              WEEKS=$((DIFF / 604800))
+              if [ $WEEKS -eq 1 ]; then
+                RELATIVE="1 week ago"
+              else
+                RELATIVE="$WEEKS weeks ago"
+              fi
+              STATUS_EMOJI="🟠"
+            fi
+
+            # Get event type label
+            EVENT_TYPE=$(curl -s -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Accept: application/vnd.github.v3+json" \
+              "https://api.github.com/users/Shineii86/events/public?per_page=1" \
+              | jq -r '.[0].type // "unknown"')
+            
+            case $EVENT_TYPE in
+              PushEvent) ACTION="pushed code" ;;
+              IssuesEvent) ACTION="opened an issue" ;;
+              IssueCommentEvent) ACTION="commented" ;;
+              PullRequestEvent) ACTION="opened a PR" ;;
+              PullRequestReviewEvent) ACTION="reviewed a PR" ;;
+              CreateEvent) ACTION="created a branch" ;;
+              DeleteEvent) ACTION="deleted a branch" ;;
+              WatchEvent) ACTION="starred a repo" ;;
+              ForkEvent) ACTION="forked a repo" ;;
+              ReleaseEvent) ACTION="published a release" ;;
+              *) ACTION="active" ;;
+            esac
+
+            STATUS_MSG="Last seen: $RELATIVE ($ACTION)"
+          fi
+
+          # Set status via GraphQL
           curl -s -X POST https://api.github.com/graphql \
             -H "Authorization: Bearer $GH_TOKEN" \
             -H "Content-Type: application/json" \
             -d '{
-              "query": "mutation { changeUserStatus(input: {message: \"Last seen: '"$TIMESTAMP"'\", emoji: \"🔍\"}) { status { message emoji } } }"
+              "query": "mutation { changeUserStatus(input: {message: \""$STATUS_MSG"\", emoji: \""$STATUS_EMOJI"\"}) { status { message emoji } } }"
             }'
-          echo "Status updated: Last seen: $TIMESTAMP"
+          
+          echo "✅ Status updated: $STATUS_MSG $STATUS_EMOJI"

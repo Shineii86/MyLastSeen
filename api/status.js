@@ -123,8 +123,16 @@ module.exports = async (req, res) => {
 
       const emoji = body.emoji || undefined;
       const expiresAt = body.expiresAt || undefined;
+      const timezone = body.timezone || 'UTC';
 
-      const status = await setUserStatus(token, message, emoji, expiresAt);
+      // Build status message with relative time if requested
+      let finalMessage = message;
+      if (body.relativeTime === true && body.eventTimestamp) {
+        const relative = getRelativeTime(body.eventTimestamp);
+        finalMessage = `${message}: ${relative}`;
+      }
+
+      const status = await setUserStatus(token, finalMessage, emoji, expiresAt);
 
       res.setHeader('Content-Type', 'application/json');
       return res.json({
@@ -134,7 +142,8 @@ module.exports = async (req, res) => {
           message: status.message,
           emoji: status.emoji || null,
           expiresAt: status.expiresAt || null,
-          indicatesLimitedAvailability: status.indicatesLimitedAvailability || false
+          indicatesLimitedAvailability: status.indicatesLimitedAvailability || false,
+          timezone
         },
         meta: { responseTime: `${Date.now() - startTime}ms`, timestamp: new Date().toISOString() }
       });
